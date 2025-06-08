@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane fx:controller="com.lovelymoda.controller.MainMenuController"
+            xmlns:fx="http://javafx.com/fxml"
+            stylesheets="file:/D:/Silvana/lovelymoda/src/com/lovelymoda/styles/estilo.css"
+            style="-fx-background-color: #e0e0e0;">
+
+    <top>
+        <HBox spacing="10" alignment="CENTER_LEFT" style="-fx-background-color: #001240">
+	        <VBox spacing="10" alignment="CENTER">
+	            <ImageView fx:id="logoImage" fitHeight="100" fitWidth="400">
+	                <image>
+	                    <Image url="file:/D:/Silvana/lovelymoda/resources/images/logo_lovely.png"/>
+	                </image>
+	            </ImageView>
+	        </VBox>
+	        <VBox spacing="10" alignment="CENTER_RIGHT">    
+	            <Label text="Menu Principal " styleClass="header-label"/>
+	        </VBox>
+        </HBox>
+    </top>
+
+    <center>
+        <GridPane hgap="20" vgap="20" alignment="CENTER" style="-fx-background-color: #e0e0e0;">
+            <columnConstraints>
+                <ColumnConstraints percentWidth="2"/>
+                <ColumnConstraints percentWidth="30"/>
+                <ColumnConstraints percentWidth="3"/>
+                <ColumnConstraints percentWidth="30"/>
+                <ColumnConstraints percentWidth="3"/>
+                <ColumnConstraints percentWidth="30"/>
+                <ColumnConstraints percentWidth="2"/>
+            </columnConstraints>
+
+            <!-- Separador  -->
+            <!-- <Pane GridPane.columnIndex="0" maxWidth="1" style="-fx-background-color: black;"/> -->
+
+            <!-- Sección Sistema -->
+            <VBox spacing="10" GridPane.columnIndex="1" style="-fx-background-color: #e0e0e0;">
+                <Label text="Sistema" styleClass="section-label"/>
+                <Separator orientation="HORIZONTAL"/>
+                <Button text="Usuarios" onAction="#abrirUsuarios"/>
+                <Button text="Parámetros" onAction="#abrirParametros"/>
+            </VBox>
+
+            <!-- Sección Ventas -->
+            <VBox spacing="10" GridPane.columnIndex="3" style="-fx-background-color: #e0e0e0;">
+                <Label text="Venta" styleClass="section-label"/>
+                <Separator orientation="HORIZONTAL"/>
+                <Button text="Clientes" onAction="#abrirABMCliente"/>
+                <Button text="Productos" onAction="#abrirProductos"/>
+                <Button text="Registrar Venta" onAction="#abrirRegistrarVenta"/>
+                <Button text="Ventas" onAction="#abrirVentas"/>
+                <Button text="Cobros" onAction="#abrirCobros"/>
+            </VBox>
+
+            <!-- Reportes -->
+            <VBox spacing="10" GridPane.columnIndex="5" style="-fx-background-color: #e0e0e0;">
+                <Label text="Reportes" styleClass="section-label"/>
+                <Separator orientation="HORIZONTAL"/>
+                <RadioButton text="Inventario" fx:id="radioInventario"/>
+                <RadioButton text="Productos más Vendidos" fx:id="radioMasVendidos"/>
+                <RadioButton text="Histórico de Ventas" fx:id="radioHistorico"/>
+                <Button text="Ejecutar Reporte" onAction="#ejecutarReporte"/>
+            </VBox>
+            
+        </GridPane>
+    </center>
+
+    <bottom>
+        <HBox spacing="10" alignment="CENTER_RIGHT" style="-fx-background-color: #e0e0e0;">
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10"/>
+            </padding>
+            <Button text="Ayuda" onAction="#mostrarAyuda"/>
+            <Button text="Salir" onAction="#salirAplicacion"/>
+        </HBox>
+    </bottom>
+
+</BorderPane>

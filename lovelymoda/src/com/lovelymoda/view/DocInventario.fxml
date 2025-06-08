@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.web.WebView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane fx:controller="com.lovelymoda.controller.DocInventarioController"
+            xmlns:fx="http://javafx.com/fxml"
+            stylesheets="file:/D:/Silvana/lovelymoda/src/com/lovelymoda/styles/estilo.css"
+            style="-fx-background-color: #e0e0e0;">   
+             
+    <center>
+        <WebView fx:id="webView" />
+    </center>
+
+    <bottom>
+        <HBox spacing="10" alignment="CENTER_RIGHT" style="-fx-background-color: #e0e0e0">
+            <Button text="Imprimir" onAction="#onImprimir"/>
+            <Button text="Salir" onAction="#onSalir"/>
+        </HBox>
+    </bottom>
+
+</BorderPane>

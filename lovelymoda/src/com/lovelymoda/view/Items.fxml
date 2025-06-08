@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+
+
+<BorderPane xmlns:fx="http://javafx.com/fxml" 
+			fx:controller="com.lovelymoda.controller.ItemsController" 
+			stylesheets="file:/D:/Silvana/lovelymoda/src/com/lovelymoda/styles/estilo.css"
+			style="-fx-background-color: #e0e0e0;">
+    
+    <top>
+        <HBox spacing="10" alignment="CENTER_LEFT" style="-fx-background-color: #001240">
+	        <VBox spacing="10" alignment="CENTER">
+	            <ImageView fx:id="logoImage" fitHeight="100" fitWidth="400">
+	                <image>
+	                    <Image url="file:/D:/Silvana/lovelymoda/resources/images/logo_lovely.png"/>
+	                </image>
+	            </ImageView>
+	        </VBox>
+	        <VBox spacing="10" alignment="CENTER_RIGHT">    
+	            <Label text="Items en Compra" styleClass="header-label"/>
+	        </VBox>
+        </HBox>
+    </top>
+    
+    <center>
+        <VBox spacing="10">
+            <TableView fx:id="tablaItems" prefHeight="400">
+                <columns>
+                    <TableColumn fx:id="colId" text="Nro Item" />
+                    <TableColumn fx:id="colDescripcion" text="Descripcion" />
+                    <TableColumn fx:id="colCantidad" text="Cantidad" />
+                    <TableColumn fx:id="colPrecio" text="Precio" />
+                    <TableColumn fx:id="colSubtotal" text="Subtotal" />
+                    <TableColumn fx:id="colCaracteristicas" text="Caracteristicas" />
+                </columns>
+            </TableView>
+        </VBox>
+    </center>
+    
+    <bottom>
+	    <VBox spacing="10" alignment="CENTER" style="-fx-background-color: #e0e0e0;">
+	    	<Separator orientation="HORIZONTAL"/>
+	        <HBox spacing="10" alignment="CENTER">
+	            <Button text="Agregar Producto" onAction="#onAgregarProducto"/>
+	            <Button text="Modificar Cantidad" onAction="#onModificarCantidad"/>
+	            <Button text="Eliminar Producto" onAction="#onEliminarProducto"/>
+	            <Button text="Finalizar Compra" onAction="#onFinalizarCompra"/>
+	        </HBox>
+	        <Separator orientation="HORIZONTAL"/>
+	        <HBox spacing="10" alignment="CENTER_RIGHT">
+	            <Button text="Ayuda" onAction="#onAyuda"/>
+	            <Button text="Salir" onAction="#onSalir"/>
+	        </HBox>
+	        <Separator orientation="HORIZONTAL"/>
+	    </VBox>
+	</bottom>
+</BorderPane>
