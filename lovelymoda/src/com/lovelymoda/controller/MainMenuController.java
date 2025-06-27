@@ -93,7 +93,9 @@ public class MainMenuController {
 
     @FXML
     public void abrirVentas() {
-    	msg.mostrarMensaje("Abrir Ventas");
+    	//msg.mostrarMensaje("Abrir Ventas");
+    	String formulario = "/com/lovelymoda/view/ABMVentas.fxml";
+    	msg.loadForm(formulario, "Ventas");
     }
 
     @FXML

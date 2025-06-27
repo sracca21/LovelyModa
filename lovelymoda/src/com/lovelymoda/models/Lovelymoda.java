@@ -17,6 +17,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.TextInputDialog;
 import javafx.stage.Stage;
 import com.lovelymoda.utils.*;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 
 
@@ -120,6 +122,8 @@ public class Lovelymoda {
 	   //Interes------------------------
 	   String parametro = "Interes";
 	   interes = getParametro(parametro);
+	   //levanto las ventas---------------------------------------------------------------------------
+	   inicializarVentas();
        
     }
 
@@ -184,16 +188,7 @@ public class Lovelymoda {
     }
     
     
-    public static void registrarVenta(String lvTipoVenta) {
-        if (!lvTipoVenta.equals("")) {
-        	if (lvTipoVenta.equals("CONTADO")) {
-        		Lovelymoda.venta = new VentaContado();
-            } else {
-            	Lovelymoda.venta = new VentaCredito();
-            }
-            Lovelymoda.venta.registrarVenta();
-        }
-    }
+
     
     public static Inventario buscarProductoId(int codProducto) {
         for (Inventario i : inventarios) {
@@ -310,21 +305,38 @@ public class Lovelymoda {
         return idMovimientoContable; 
     }
     
+    public static void registrarVenta(String lvTipoVenta) {
+        if (!lvTipoVenta.equals("")) {
+        	if (lvTipoVenta.equals("CONTADO")) {
+        		Lovelymoda.venta = new VentaContado();
+            } else {
+            	Lovelymoda.venta = new VentaCredito();
+            }
+            Lovelymoda.venta.registrarVenta();
+        }
+    }
+    
     public static void finalizarCarrito() {
     	venta = Lovelymoda.venta.getVenta();
     	venta.setVenta();
     	String rta = msg.ingresoSiNo("Confirma", "Confirma finalizar venta?");
     	if(rta == "SI") {
+    		if(venta.getTipoVenta() == "CREDITO") {
+    			int cuotas = ingresoCuotas();
+    			venta.setCuotas(cuotas);
+    			venta.setInteres(interes);
+    			venta.calcularCuotas();
+    		}
     		venta.registrarCobro();
     		Object[] datos = venta.getDatosCobro();
     		int cuotas = (int) datos[0];
-    		float monto = (float) datos[1];
+    		double monto = (double) datos[1];
     		String str = "";
     		if(venta.getTipoVenta() == "CONTADO") {
-    			str = "Cobro: " + String.valueOf(cuotas) + " pago de " + String.valueOf(monto) + " " + venta.getMoneda();
+    			str = "Cobro: " + String.valueOf(cuotas) + " pago de " + String.format("%.2f", monto) + " " + venta.getMoneda();
     		}else {
     			
-    			str = "Cobro: " + String.valueOf(cuotas) + " cuotas de " + String.valueOf(monto) + " " + venta.getMoneda();
+    			str = "Cobro: " + String.valueOf(cuotas) + " cuotas de " + String.format("%.2f", monto) + " " + venta.getMoneda() + ", Interes TEM: " + String.valueOf(interes) + "%";
     		}
     		rta = msg.ingresoSiNo("Confirma", str);
     		if(rta == "SI") {
@@ -333,14 +345,63 @@ public class Lovelymoda {
     	}
     }
     
+    
     public static void finalizarVenta() {
     	//msg.mostrarMensaje("Finalizar Venta");
     	cliente.setVenta(venta);
+    	int idVenta = Lovelymoda.getLastVenta() + 1;
+    	venta.setIdVenta(idVenta);
+    	venta.setIdCliente(cliente.getIdCliente());
     	venta.finalizarVenta();
     	//Actualizar BD
-    	//vtaDB.agregarVenta(venta, cliente);
+    	vtaDB.agregarVenta(venta, cliente);
     	
     }
+    
+    public static void reporteInventario() {
+    	//msg.mostrarMensaje("Ejecutar reporte de Inventario");
+    	String fecha = Util.getFechaYYYYMMDD();
+    	String file = "D:/Silvana/lovelymoda/resources/doc/ReporteInventario" + fecha + ".html";
+    	DocInventarioHTML.generarReporteInventario(inventarios, file);
+		String formulario = "/com/lovelymoda/view/DocInventario.fxml";
+		String titulo = "Reporte de Inventario - Clasificacion de Pareto";
+		msg.loadDocInventario(formulario, file, titulo);
+    }
+    
+    public static int ingresoCuotas() {
+    	// Crear un cuadro de diálogo para ingresar cantidad de cuotas
+    	TextInputDialog dialog = new TextInputDialog();
+    	dialog.setTitle("Ingrese cantidad de Cuotas");
+    	dialog.setHeaderText("Ingrese cantidad de Cuotas");
+    	dialog.setContentText("Cuotas:");
+    	int cuotas;
+    	// Mostrar el cuadro y esperar la entrada del usuario
+    	Optional<String> result = dialog.showAndWait();
+
+    	if (result.isPresent()) {
+    	    String cuotasstr = result.get();
+    	    cuotas = Integer.parseInt(cuotasstr);
+    	    System.out.println("Cuotas: " + cuotasstr);
+    	    
+    	    if (cuotas > 0) {
+    	        // cuotas validas
+    	        System.out.println("Cuotas validas");
+    	        return cuotas;
+    	        
+    	    } else {
+    	        // Numero de cuotas invalido
+    	        System.out.println("Numero de cuotas invalido.");
+    	        // Crear un cuadro de informacion
+    	        msg.mostrarMensaje("Numero de cuotas invalido.");
+    	        cuotas = 1;
+    	    }
+    	    
+    	} else {
+    	    System.out.println("El usuario canceló el ingreso.");
+    	    cuotas = 1;
+    	}
+    	return cuotas;
+    }    
     
     public static double getParametro(String parametro) {
         // Conexion ---------------------------------------------------------------------    	
@@ -375,13 +436,100 @@ public class Lovelymoda {
         return valorTotal;
     }
     
-    public static void reporteInventario() {
-    	//msg.mostrarMensaje("Ejecutar reporte de Inventario");
-    	String fecha = Util.getFechaYYYYMMDD();
-    	String file = "D:/Silvana/lovelymoda/resources/doc/ReporteInventario" + fecha + ".html";
-    	DocInventarioHTML.generarReporteInventario(inventarios, file);
-		String formulario = "/com/lovelymoda/view/DocInventario.fxml";
-		String titulo = "Reporte de Inventario - Clasificacion de Pareto";
-		msg.loadDocInventario(formulario, file, titulo);
+    
+    public static void inicializarVentas() {
+        ventas.clear(); // Limpia
+        DBConnection dbConn = new DBConnection();
+        
+        String sql = "SELECT v.idVenta, v.fecha, v.hora, v.monto, v.moneda, v.cuotas, v.montoCuota, v.tipoVenta, " +
+                     "       c.idCliente, p.nombre, p.apellido, p.dni, p.telefono, p.direccion, p.correo " +
+                     "FROM Venta v " +
+                     "JOIN Cliente c ON v.Cliente_idCliente = c.idCliente " +
+                     "JOIN Persona p ON c.Persona_idPersona = p.idPersona " + 
+                     "ORDER BY v.idVenta ASC";
+
+        try (Connection conn = dbConn.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+            
+            while (rs.next()) {
+                // completa datos del cliente
+                Cliente cliente = new Cliente(
+                    rs.getInt("idCliente"),
+                    rs.getString("dni"),
+                    rs.getString("nombre"),
+                    rs.getString("apellido"),
+                    rs.getString("direccion"),
+                    rs.getString("telefono"),
+                    rs.getString("correo")
+                );
+
+                // inicializa el objeto venta
+                String tipoVenta = rs.getString("tipoVenta");
+                Venta venta;
+                if ("CONTADO".equalsIgnoreCase(tipoVenta)) {
+                    venta = new VentaContado();
+                } else {
+                    venta = new VentaCredito();
+                }
+
+                // setea datos de venta
+                venta.setFecha(rs.getDate("fecha").toLocalDate());
+                venta.setHora(rs.getTime("hora").toLocalTime());
+                venta.setMonto(rs.getFloat("monto"));
+                venta.setMoneda(rs.getString("moneda"));
+                venta.setIdCliente(rs.getInt("idCliente"));
+                venta.setIdVenta(rs.getInt("idVenta"));
+                venta.setCuotas(rs.getInt("cuotas"));
+                venta.setMontoCuota(rs.getDouble("montoCuota"));
+
+                // items de la venta
+                venta.clearProducto();
+                String sqlProd = "SELECT idProducto, descripcion, cantidad, precio, subtotal, caracteristicas " +
+                                 "FROM Producto WHERE Venta_idVenta = ? AND Venta_Cliente_idCliente = ?";
+                try (PreparedStatement psProd = conn.prepareStatement(sqlProd)) {
+                    psProd.setInt(1, rs.getInt("idVenta"));
+                    psProd.setInt(2, rs.getInt("idCliente"));
+                    ResultSet rsProd = psProd.executeQuery();
+                    while (rsProd.next()) {
+                        Producto p = new Producto(
+                        	rsProd.getInt("idProducto"),
+                            rsProd.getString("descripcion"),
+                            rsProd.getInt("cantidad"),
+                            rsProd.getFloat("precio"),
+                            rsProd.getString("caracteristicas")
+                        );
+                        venta.agregarProducto(p);
+                    }
+                }
+
+                // inicializa el/los cobros de la venta
+                venta.clearCobro();
+                String sqlCobro = "SELECT fecha, hora, monto, moneda " +
+                                  "FROM Cobro WHERE Venta_idVenta = ? AND Venta_Cliente_idCliente = ?";
+                try (PreparedStatement psCobro = conn.prepareStatement(sqlCobro)) {
+                    psCobro.setInt(1, rs.getInt("idVenta"));
+                    psCobro.setInt(2, rs.getInt("idCliente"));
+                    ResultSet rsCobro = psCobro.executeQuery();
+                    while (rsCobro.next()) {
+                        Cobro cobro = new Cobro();
+                        cobro.setMonto(rsCobro.getFloat("monto"));
+                        cobro.setFecha(rsCobro.getDate("fecha").toLocalDate());
+                        cobro.setHora(rsCobro.getTime("hora").toLocalTime());
+                        cobro.setMoneda(rsCobro.getString("moneda"));
+                        venta.agregarCobro(cobro);
+                    }
+                }
+
+                ventas.add(venta);
+            }
+
+            //msg.mostrarMensaje("Ventas cargadas correctamente: " + ventas.size());
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            msg.mostrarMensaje("Error al cargar ventas: " + e.getMessage());
+        }
     }
+
 }

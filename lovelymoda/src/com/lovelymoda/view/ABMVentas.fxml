@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+
+
+<BorderPane xmlns:fx="http://javafx.com/fxml" 
+			fx:controller="com.lovelymoda.controller.ABMVentaController" 
+			stylesheets="file:/D:/Silvana/lovelymoda/src/com/lovelymoda/styles/estilo.css"
+			style="-fx-background-color: #e0e0e0;">
+    
+    <top>
+        <HBox spacing="10" alignment="CENTER_LEFT" style="-fx-background-color: #001240">
+	        <VBox spacing="10" alignment="CENTER">
+	            <ImageView fx:id="logoImage" fitHeight="100" fitWidth="400">
+	                <image>
+	                    <Image url="file:/D:/Silvana/lovelymoda/resources/images/logo_lovely.png"/>
+	                </image>
+	            </ImageView>
+	        </VBox>
+	        <VBox spacing="10" alignment="CENTER_RIGHT">    
+	            <Label text="Ventas " styleClass="header-label"/>
+	        </VBox>
+        </HBox>
+    </top>
+    
+    <center>
+        <VBox spacing="10">
+            <TableView fx:id="tablaVentas" prefHeight="300">
+                <columns>
+                    <TableColumn fx:id="colId" text="id Venta" />
+                    <TableColumn fx:id="colFecha" text="Fecha" />
+                    <TableColumn fx:id="colHora" text="Hora" />
+                    <TableColumn fx:id="colMonto" text="Monto" />
+                    <TableColumn fx:id="colMoneda" text="Moneda" />
+                    <TableColumn fx:id="colCliente" text="Cliente" />
+                    <TableColumn fx:id="colCuotas" text="Cuotas" />
+                    <TableColumn fx:id="colMontoCuota" text="Monto Cuota" />
+                    <TableColumn fx:id="colTipo" text="Venta" />
+                </columns>
+            </TableView>
+        </VBox>
+    </center>
+    
+    <bottom>
+	    <VBox spacing="10" alignment="CENTER" style="-fx-background-color: #e0e0e0;">
+	    	<Separator orientation="HORIZONTAL"/>
+	        <HBox spacing="10" alignment="CENTER">
+	            <Button text="Nuevo" onAction="#onAltaVenta"/>
+	            <Button text="Eliminar" onAction="#onEliminar"/>
+	            <Button text="Modificar" onAction="#onModificar"/>
+	            <Button text="Listado" onAction="#onListado"/>
+	            <Button text="Buscar" onAction="#onBuscar"/>
+	        </HBox>
+	        <Separator orientation="HORIZONTAL"/>
+	        <HBox spacing="10" alignment="CENTER_RIGHT">
+	            <Button text="Ayuda" onAction="#onAyuda"/>
+	            <Button text="Salir" onAction="#onSalir"/>
+	        </HBox>
+	        <Separator orientation="HORIZONTAL"/>
+	    </VBox>
+	</bottom>
+</BorderPane>

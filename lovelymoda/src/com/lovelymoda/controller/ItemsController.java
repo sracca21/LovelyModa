@@ -106,7 +106,7 @@ public class ItemsController {
     }
     @FXML private void onEliminarProducto() {}
     @FXML private void onFinalizarCompra() {
-    	 float monto = Lovelymoda.venta.getMonto();
+    	 double monto = Lovelymoda.venta.getMonto();
     	 String str = "Monto total de la compra: " + String.valueOf(monto) + " ARS";
     	 String rta = msg.ingresoSiNo("Confirma", str);
     	 if(rta == "SI") {

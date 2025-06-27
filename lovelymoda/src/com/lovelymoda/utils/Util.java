@@ -194,4 +194,10 @@ public class Util{
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
         return hoy.format(formatter);
     }
+	
+	public static String getFechaDMY() {
+        LocalDate hoy = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        return hoy.format(formatter);
+    }
 }

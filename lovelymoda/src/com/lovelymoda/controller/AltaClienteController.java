@@ -57,6 +57,7 @@ public class AltaClienteController {
 	            // Mostrar mensaje de éxito
     			msg.mostrarMensajeCust("Cliente guardado exitosamente.", "Exito");
     			if (Lovelymoda.procesoVenta) {
+    				//msg.mostrarMensajeCust("Redireccionado al proceso de Venta.", "Crear Venta");
     				Lovelymoda.procesoVenta = false;
     				this.irVentasCliente();
     			}
@@ -76,11 +77,11 @@ public class AltaClienteController {
     public void irVentasCliente() {
 	    // se recupera el cliente creado
 		cliente = Lovelymoda.cliente;
-	    if (cliente != null) {
-	        // se muestra el cliente para proseguir con la venta
+	    if (cliente != null) {	    	
+	    	// El cliente fue encontrado se muestra para proseguir la venta
 	        System.out.println("Cliente encontrado: " + cliente.getNombre());
-	        formulario = "/com/lovelymoda/view/Cliente.fxml";
-	    	msg.loadForm(formulario,"Cliente");
+	        formulario = "/com/lovelymoda/view/CrearVentaCliente.fxml";
+	    	msg.loadForm(formulario,"Crear Venta Cliente");
 	        
 	    }
     }

@@ -10,6 +10,8 @@ public class VentaContado extends Venta {
     
     public VentaContado() {
     	tipoVenta = "CONTADO";
+    	this.clearCobro();
+    	this.clearProducto();
     }
     
     @Override
@@ -27,7 +29,7 @@ public class VentaContado extends Venta {
     @Override
     public void registrarCobro() {
         Cobro cobro = new Cobro();
-        float monto = this.getMonto();
+        double monto = this.getMonto();
         cobro.setMonto(monto);
         this.agregarCobro(cobro);
     }
@@ -36,5 +38,11 @@ public class VentaContado extends Venta {
     public String getTipoVenta() {
         return this.tipoVenta;
     }
+    
+    @Override
+    public void calcularCuotas() {
+    	
+    }
+    
     
 }

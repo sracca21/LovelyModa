@@ -5,7 +5,7 @@ import java.time.LocalTime;
 public class Cobro{
 	private LocalDate fecha;
     private LocalTime hora;
-	private float monto;
+	private double monto;
 	private String moneda;
 	private int nromovcont;
     
@@ -16,11 +16,11 @@ public class Cobro{
         this.moneda = "ARS";
 	}
 	
-	public void setMonto(float monto) {
+	public void setMonto(double monto) {
 		this.monto = monto;
 	}
 	
-	public float getMonto() {
+	public double getMonto() {
 		return this.monto;
 	}
 	
@@ -30,6 +30,30 @@ public class Cobro{
 	
 	public void setNroMovCont(int nroMovCont) {
 		this.nromovcont = nroMovCont;
+	}
+	
+	public LocalDate getFecha() {
+		return this.fecha;
+	}
+	
+	public LocalTime getHora() {
+		return this.hora;
+	}
+	
+	public String getMoneda() {
+		return this.moneda;
+	}
+	
+	public void setFecha(LocalDate fecha) {
+		this.fecha = fecha;
+	}
+	
+	public void setHora(LocalTime hora) {
+		this.hora = hora;
+	}
+	
+	public void setMoneda(String moneda) {
+		this.moneda = moneda;
 	}
 	
 }
